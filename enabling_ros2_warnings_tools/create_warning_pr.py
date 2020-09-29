@@ -52,10 +52,10 @@ def make_pr(
 ):
     command = [
         'gh', 'pr', 'create',
-        '--title', f'"{title}"',
-        '--body', f'"{body}"',
-        '--base', f'"{base_branch}"',
-        '--assignee', f'"{assignee}"',
+        '--title', title,
+        '--body', body,
+        '--base', base_branch,
+        '--assignee', assignee,
     ]
     if is_dry_run:
         print(f"Command would be '{' '.join(command)}'")
