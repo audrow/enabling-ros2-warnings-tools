@@ -58,7 +58,7 @@ def make_pr(
         '--assignee', assignee,
     ]
     if is_dry_run:
-        print(f"Command would be '{' '.join(command)}'")
+        print(f"Command: {' '.join(command)}")
     else:
         logger.info("Creating PR")
         return subprocess.run(command)
@@ -69,12 +69,12 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('package', type=str, help='The package name')
     parser.add_argument('base_branch', type=str, help='The branch name to merge into')
+    parser.add_argument('assignee', type=str,
+                        help='Who should be assigned to the PR')
     parser.add_argument('warnings', type=str, help='The warnings to mention in the PR')
     parser.add_argument('--is-no-change',
                         default=False, action='store_true',
                         help='Has the source code been changed?')
-    parser.add_argument('-a', '--assignee', type=str,
-                        help='Who should be assigned to the PR')
     parser.add_argument('-d', '--dry-run', '-d',
                         default=False, action='store_true',
                         help="Output the command that would be used")
