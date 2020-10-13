@@ -27,11 +27,17 @@ def make_warning_pr(
         package_name: str,
         assignee: str,
         *warnings: str,
+        additional_message: str = None,
         is_no_change: bool = False,
         is_dry_run: bool = False,
 ):
     title = f'[{package_name}] Add warnings'
     body = f'This PR enables {list_to_str(*warnings, is_wrap_in_ticks=True)} in `{package_name}`.'
+    if additional_message is not None:
+        additional_message = additional_message.strip()
+        if additional_message[-1] not in ['.', '!', '?']:
+            additional_message += '.'
+        body += " " + additional_message
     if is_no_change:
         body += " No source code was modified to enable these warnings."
     return make_pr(
@@ -72,9 +78,11 @@ def main():
     parser.add_argument('assignee', type=str,
                         help='Who should be assigned to the PR')
     parser.add_argument('warnings', type=str, help='The warnings to mention in the PR')
-    parser.add_argument('--is-no-change',
+    parser.add_argument('-nc', '--is-no-change',
                         default=False, action='store_true',
                         help='Has the source code been changed?')
+    parser.add_argument('-m', '--additional-message', type=str,
+                        default=None, help='Text that should be included in the PR')
     parser.add_argument('-d', '--dry-run', '-d',
                         default=False, action='store_true',
                         help="Output the command that would be used")
@@ -85,6 +93,7 @@ def main():
         args.package,
         args.assignee,
         *warnings,
+        additional_message=args.additional_message,
         is_no_change=args.is_no_change,
         is_dry_run=args.dry_run,
     )
